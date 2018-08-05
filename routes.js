@@ -106,11 +106,19 @@ module.exports = function(server) {
   })
 
   server.delete("/notes/:id", function(req, res) {
-    console.log(req)
-    Note.findByIdAndRemove({_id: req.params.id})
+    console.log("THIS IS DELETE REQUEST", req.params)
+    Note.findByIdAndRemove(req.params.id)
     .then(note => {
       res.json({note});
     }).catch((err) => console.log("delete error:",err.message));
+  })
+
+  server.put("/notes/:id", function(req, res) {
+    console.log("REQ UPDATE", req.body);
+    Note.findByIdAndUpdate(req.params.id, {title: req.body.title, content: req.body.content})
+    .then(note => {
+      res.status(201).json({note});
+    }).catch((err) => console.log("edit error:", err));
   })
 
   server.post("/notes", function(req,res) {
